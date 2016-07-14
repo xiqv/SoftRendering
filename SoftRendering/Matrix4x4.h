@@ -54,6 +54,14 @@ namespace XMATH {
 			return Matrix4x4(retMat);
 		}
 
+		/*
+			基于左手坐标轴的旋转
+
+			Y      *
+			*    / Z
+			|  /
+			|/________* X
+		*/
 		static Matrix4x4 rotationX(float angle) {
 			float s = sinf(angle);
 			float c = cosf(angle);
@@ -61,7 +69,7 @@ namespace XMATH {
 			float retMat[] = {
 				1, 0, 0, 0,
 				0, c, s, 0,
-				0,-s,-c, 0,
+				0,-s, c, 0,
 				0, 0, 0, 1
 			};
 			return Matrix4x4(retMat);
@@ -129,6 +137,25 @@ namespace XMATH {
 
 			float reciprocalW = 1 / w;
 			return Vector3(x * reciprocalW, y * reciprocalW, z * reciprocalW);
+		}
+
+		static Matrix4x4 lookAt(const Vector3& eye, const Vector3& target, const Vector3& up) {
+			//先平移后旋转
+			Vector3 axisZ = (target - eye).normalize();
+			Vector3 axisX = up.cross(axisZ).normalize();
+			Vector3 axisY = axisZ.cross(axisX).normalize();
+
+			float transX = -eye.dot(axisX);
+			float transY = -eye.dot(axisY);
+			float transZ = -eye.dot(axisZ);
+
+			float  retMat[] = {
+				axisX.x, axisX.y, axisX.z, 0,
+				axisY.x, axisY.y, axisY.z, 0,
+				axisZ.x, axisZ.y, axisZ.z, 0,
+				transX,  transY,  transZ,  1
+			};
+			return Matrix4x4(retMat);
 		}
 
 		Matrix4x4 operator*(const Matrix4x4& m) const {
