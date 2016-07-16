@@ -23,15 +23,9 @@ namespace XMATH {
 			}
 		}//Matrix4x4(float mat_[])
 
-		bool operator==(const Matrix4x4& m) const {
-			for (int i = 0; i != 16; ++i) {
-				if (!equal(mat[i],m.mat[i])) {
-					return false;
-				}
-			}
-			return true;
-		}
-
+		/*
+		*Static Function
+		*/
 		static Matrix4x4 identity() {
 			float retMat[] = {
 				1,0,0,0,
@@ -106,7 +100,7 @@ namespace XMATH {
 			return Matrix4x4(retMat);
 		}
 
-		Matrix4x4 translation(const Vector3& v) const {
+		static Matrix4x4 translation(const Vector3& v) {
 			float retMat[] = {
 				1,   0,   0,  0,
 				0,   1,   0,  0,
@@ -114,16 +108,6 @@ namespace XMATH {
 				v.x, v.y, v.z,  1
 			};
 			return Matrix4x4(retMat);
-		}
-
-		Vector3 transform(const Vector3& v) const {
-			float x = v.x * mat[4 * 0] + v.y*mat[4 * 1] + v.z*mat[4 * 2] + mat[4 * 3];
-			float y = v.x * mat[4 * 0 + 1] + v.y*mat[4 * 1 + 1] + v.z*mat[4 * 2 + 1] + mat[4 * 3 + 1];
-			float z = v.x * mat[4 * 0 + 2] + v.y*mat[4 * 1 + 2] + v.z*mat[4 * 2 + 2] + mat[4 * 3 + 2];
-			float w = v.x * mat[4 * 0 + 3] + v.y*mat[4 * 1 + 3] + v.z*mat[4 * 2 + 3] + mat[4 * 3 + 3];
-
-			float reciprocalW = 1 / w;
-			return Vector3(x * reciprocalW, y * reciprocalW, z * reciprocalW);
 		}
 
 		static Matrix4x4 perspective(float fieldOfView, float aspect, float znear, float zfar) {
@@ -158,6 +142,29 @@ namespace XMATH {
 			return Matrix4x4(retMat);
 		}
 
+		Vector3 transform(const Vector3& v) const {
+			float x = v.x * mat[4 * 0] + v.y*mat[4 * 1] + v.z*mat[4 * 2] + mat[4 * 3];
+			float y = v.x * mat[4 * 0 + 1] + v.y*mat[4 * 1 + 1] + v.z*mat[4 * 2 + 1] + mat[4 * 3 + 1];
+			float z = v.x * mat[4 * 0 + 2] + v.y*mat[4 * 1 + 2] + v.z*mat[4 * 2 + 2] + mat[4 * 3 + 2];
+			float w = v.x * mat[4 * 0 + 3] + v.y*mat[4 * 1 + 3] + v.z*mat[4 * 2 + 3] + mat[4 * 3 + 3];
+
+			float reciprocalW = 1 / w;
+			return Vector3(x * reciprocalW, y * reciprocalW, z * reciprocalW);
+		}
+
+		bool operator==(const Matrix4x4& m) const {
+			for (int i = 0; i != 16; ++i) {
+				if (!equal(mat[i], m.mat[i])) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		bool operator!=(const Matrix4x4& m) const {
+			return !(*this == m);
+		}
+
 		Matrix4x4 operator*(const Matrix4x4& m) const {
 			Matrix4x4 retMat;
 			for (int i = 0; i != 16; ++i) {
@@ -171,6 +178,7 @@ namespace XMATH {
 		}
 	};
 
+	inline 
 	Vector3 operator*(const Vector3& v,const Matrix4x4& m) {
 		return m.transform(v);
 	}
