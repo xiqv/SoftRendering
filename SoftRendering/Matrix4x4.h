@@ -18,20 +18,8 @@ namespace XMATH {
 		}
 
 		Matrix4x4(float mat_[]) {
-			int sz = sizeof(mat_) / sizeof(float);
-			
-			if (sz >= 16) {
-				for (int i = 0; i != 16; ++i) {
-					mat[i] = mat_[i];
-				}
-			}
-			else {
-				for (int i = 0; i != sz; ++i) {
-					mat[i] = mat_[i];
-				}
-				for (int i = sz; i != 16; ++i) {
-					mat[i] = 0.0f;
-				}
+			for (int i = 0; i != 16; ++i) {
+				mat[i] = mat_[i];
 			}
 		}//Matrix4x4(float mat_[])
 
@@ -78,7 +66,6 @@ namespace XMATH {
 		static Matrix4x4 rotationY(float angle) {
 			float s = sinf(angle);
 			float c = cosf(angle);
-
 			float retMat[] = {
 				c, 0,-s, 0,
 				0, 1, 0, 0,
@@ -139,8 +126,21 @@ namespace XMATH {
 			return Vector3(x * reciprocalW, y * reciprocalW, z * reciprocalW);
 		}
 
+		static Matrix4x4 perspective(float fieldOfView, float aspect, float znear, float zfar) {
+			float height = 1 / tan(fieldOfView / 2);
+			float width = height / aspect;
+			
+			float  retMat[] = {
+				width, 0,      0,                       0,
+				0,     height, 0,                       0,
+				0,     0,      zfar / (zfar - znear),   1,
+				0,     0,      zfar*znear/(znear-zfar), 0
+			};
+			return Matrix4x4(retMat);
+		}
+
 		static Matrix4x4 lookAt(const Vector3& eye, const Vector3& target, const Vector3& up) {
-			//先平移后旋转
+			//先平移后旋转 旋转矩阵为正交矩阵，矩阵的逆等于矩阵的转置
 			Vector3 axisZ = (target - eye).normalize();
 			Vector3 axisX = up.cross(axisZ).normalize();
 			Vector3 axisY = axisZ.cross(axisX).normalize();
@@ -150,9 +150,9 @@ namespace XMATH {
 			float transZ = -eye.dot(axisZ);
 
 			float  retMat[] = {
-				axisX.x, axisX.y, axisX.z, 0,
-				axisY.x, axisY.y, axisY.z, 0,
-				axisZ.x, axisZ.y, axisZ.z, 0,
+				axisX.x, axisY.x, axisZ.x, 0,
+				axisX.y, axisY.y, axisZ.y, 0,
+				axisX.z, axisY.z, axisZ.z, 0,
 				transX,  transY,  transZ,  1
 			};
 			return Matrix4x4(retMat);
