@@ -146,6 +146,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="Xmath.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Vector3.h" />
