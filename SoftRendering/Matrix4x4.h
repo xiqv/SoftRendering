@@ -175,6 +175,7 @@ namespace XMATH {
 							  mat[j + 2] * m.mat[k + 2 * 4] + mat[j + 3] * m.mat[k + 3 * 4];
 				retMat.mat[i] = value;
 			}
+			return retMat;
 		}
 	};
 

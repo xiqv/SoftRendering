@@ -24,7 +24,7 @@ public:
 	}
 
 	Color operator*(const Color& c) const {
-		return Color(blend(r, c.r, c.a), blend(g, c.g, c.a), blend(b, c.b, c.a), 1-(1-a)*(1-c.a));
+		return Color(r * c.r, g * c.g, b * c.b, a);
 	}
 
 	Color interpolate(const Color& c, float factor) const {
@@ -32,10 +32,6 @@ public:
 	}
 
 	uint32_t getUint32() const;
-private:
-	float blend(float color1, float color2, float alpha2) const {
-		return color1 * a + color2 * alpha2;
-	}
 };
 
 inline
