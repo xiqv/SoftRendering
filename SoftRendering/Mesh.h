@@ -21,13 +21,6 @@ public:
 	
 	//从xi3d文件中载入Mesh数据
 	Mesh(const char* path);
-
-private:
-	//读取xi3d文件下一非注释行
-	void getNextLine(std::istream& is,std::string& line) const;
-
-	//划分字符串
-	std::vector<std::string> splitLine(const std::string& s) const;
 };
 
 inline

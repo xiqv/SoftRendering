@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+#include "SRutility.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -54,25 +56,4 @@ Mesh::Mesh(const char * path) {
 		indices.push_back(stoi(vs[2]));
 	}
 	meshIs.close();
-}
-
-void Mesh::getNextLine(std::istream & is, std::string & line) const {
-	while (true) {
-		std::getline(is, line);
-		if (!line.empty() && line[0] != '#') {
-			break;
-		}
-	}
-}
-
-std::vector<std::string> Mesh::splitLine(const std::string & s) const {
-	std::vector<std::string> vs;
-	std::istringstream iss(s);
-
-	std::string splitS;
-	while (!iss.eof()) {
-		iss >> splitS;
-		vs.push_back(splitS);
-	}
-	return vs;
 }
