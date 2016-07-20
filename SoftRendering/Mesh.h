@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Vertex.h"
+#include "Texture.h"
 
 class Mesh {
 public:
@@ -16,11 +17,17 @@ public:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned> indices;
 
+	Texture *texture;
+
 	//默认构造函数，自己手动定义Mesh
 	Mesh();
 	
 	//从xi3d文件中载入Mesh数据
-	Mesh(const char* path);
+	Mesh(const char* path, const char* texturePath);
+
+	~Mesh() {
+		delete texture;
+	}
 };
 
 inline

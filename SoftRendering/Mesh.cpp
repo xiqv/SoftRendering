@@ -8,7 +8,7 @@
 using std::stof;
 using std::stoi;
 
-Mesh::Mesh(const char * path) {
+Mesh::Mesh(const char* path, const char* texturePath) {
 	position = XMATH::Vector3(0.0f, 0.0f, 0.0f);
 	rotation = XMATH::Vector3(0.0f, 0.0f, 0.0f);
 	scale = XMATH::Vector3(1.0f, 1.0f, 1.0f);
@@ -56,4 +56,6 @@ Mesh::Mesh(const char * path) {
 		indices.push_back(stoi(vs[2]));
 	}
 	meshIs.close();
+
+	texture = new Texture(texturePath);
 }
