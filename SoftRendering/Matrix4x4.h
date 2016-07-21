@@ -178,11 +178,6 @@ namespace XMATH {
 			return retMat;
 		}
 	};
-
-	inline 
-	Vector3 operator*(const Vector3& v,const Matrix4x4& m) {
-		return m.transform(v);
-	}
 };
 
 #endif

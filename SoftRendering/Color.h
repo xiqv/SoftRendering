@@ -1,6 +1,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include "Xmath.h"
+
 class Color {
 public:
 	float r;
@@ -12,7 +14,12 @@ public:
 	Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f) :r(_r), g(_g), b(_b), a(_a) { }
 
 	Color operator+(const Color& c) const {
-		return Color(r + c.r, g + c.g, b + c.b, a + c.a);
+		float addR = XMATH::min(r + c.r, 1.0f);
+		float addG = XMATH::min(g + c.g, 1.0f);
+		float addB = XMATH::min(b + c.b, 1.0f);
+		float addA = XMATH::min(a + c.a, 1.0f);
+
+		return Color(addR, addG, addB, addA);
 	}
 
 	Color operator-(const Color& c) const {
