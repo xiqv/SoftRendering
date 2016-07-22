@@ -10,7 +10,7 @@
 Image::Image(const char * path) {
 	std::ifstream imageIs(path);
 	if (!imageIs) {
-		std::cerr << "Loading Image Fail." << std::endl;
+		fprintf(stderr, "Loading image fail.\n");
 		return;
 	}
 
@@ -42,7 +42,7 @@ Image::Image(const char * path) {
 void Image::saveImage(const char* name) const {
 	if (width*height == 0) {
 		//Î´·ÖÅä¿Õ¼ä
-		std::cerr << "This is a empty image.\n";
+		fprintf(stderr, "This is a empty image.\n");
 		return;
 	}
 
@@ -52,7 +52,7 @@ void Image::saveImage(const char* name) const {
 
 	std::ofstream ofs(fileName);
 	if (!ofs) {
-		std::cerr << "OUTPUT IMAGE FAILED." << std::endl;
+		fprintf(stderr, "OUTPUT IMAGE FAILED.\n");
 		return;
 	}
 

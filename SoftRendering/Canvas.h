@@ -14,6 +14,7 @@ class Canvas {
 public:
 	Canvas(uint32_t *drawBuffer, int width, int height);
 
+	Camera getCamera() const;
 	void setCamera(const Camera& camera);
 
 	void clear();
@@ -58,6 +59,11 @@ Canvas::Canvas(uint32_t * drawBuffer, int width, int height)
 inline 
 void Canvas::setCamera(const Camera & camera) {
 	_camera = camera;
+}
+
+inline 
+Camera Canvas::getCamera() const {
+	return _camera;
 }
 
 inline

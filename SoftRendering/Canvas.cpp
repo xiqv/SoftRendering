@@ -151,10 +151,8 @@ void Canvas::drawMesh(const Mesh & mesh) {
 	Matrix4x4 translation = Matrix4x4::translation(mesh.position);
 	Matrix4x4 rotate = Matrix4x4::rotation(mesh.rotation);
 
-	Matrix4x4 cameraMat = _camera.cameraMatrix4x4();
-
 	Matrix4x4 world = rotate * translation * scale;
-	Matrix4x4 transform = world * cameraMat;
+	Matrix4x4 transform = world * _camera.cameraMatrix4x4();
 	
 	for (int i = 0; i != mesh.indices.size(); i+=3) {
 		const Vertex &a = mesh.vertices[mesh.indices[i]];

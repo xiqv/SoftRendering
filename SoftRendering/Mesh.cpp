@@ -2,7 +2,6 @@
 
 #include "SRutility.h"
 
-#include <iostream>
 #include <sstream>
 
 using std::stof;
@@ -15,7 +14,7 @@ Mesh::Mesh(const char* path, const char* texturePath) {
 
 	std::ifstream meshIs(path);
 	if (!meshIs) {
-		std::cerr << "Loading Mesh File Fail." << std::endl;
+		fprintf(stderr, "Loading Mesh File Fail.\n");
 		return;
 	}
 

@@ -6,32 +6,40 @@
 
 class Camera {
 public:
-	Camera() = default;
+	Camera() {
+		updateCameraMatrix();
+	}
 
-	Camera(const XMATH::Vector3& position, const XMATH::Vector3& target, const XMATH::Vector3 up) :
-		_position(position), _target(target), _up(up) { }
+	Camera(const XMATH::Vector3& _position, const XMATH::Vector3& _target, const XMATH::Vector3 _up) :
+		position(_position), target(_target), up(_up) {
+		updateCameraMatrix();
+	}
 
-	Camera(float fieldOfView, float aspect, float zNear, float zFar) :
-		_fieldOfView(fieldOfView), _aspect(aspect), _zNear(zNear), _zFar(zFar) { }
+	Camera(float fieldOfViewDegree, float aspect, float zNear, float zFar) :
+		_fieldOfView(fieldOfViewDegree), _aspect(aspect), _zNear(zNear), _zFar(zFar) {
+		updateCameraMatrix();
+	}
 
-	Camera(const XMATH::Vector3& position, const XMATH::Vector3& target, const XMATH::Vector3 up,
-		float fieldOfView, float aspect, float zNear, float zFar) :
-		_position(position), _target(target), _up(up),
-		_fieldOfView(fieldOfView), _aspect(aspect), _zNear(zNear), _zFar(zFar) { }
+	Camera(const XMATH::Vector3& _position, const XMATH::Vector3& _target, const XMATH::Vector3 _up,
+		float fieldOfViewDegree, float aspect, float zNear, float zFar) :
+		position(_position), target(_target), up(_up),
+		_fieldOfView(fieldOfViewDegree), _aspect(aspect), _zNear(zNear), _zFar(zFar) {
+		updateCameraMatrix();
+	}
 
-	void setPerspective(float fieldOfView, float aspect, float zNear, float zFar);
+	void setPerspective(float fieldOfViewDegree, float aspect, float zNear, float zFar);
 
 	void updateCameraMatrix();
-	XMATH::Matrix4x4 cameraMatrix4x4() const;
+	const XMATH::Matrix4x4& cameraMatrix4x4() const;
 
-	XMATH::Vector3 _position;
-	XMATH::Vector3 _target;
-	XMATH::Vector3 _up;
+	XMATH::Vector3 position;
+	XMATH::Vector3 target;
+	XMATH::Vector3 up;
 private:
-	float _fieldOfView = 0.0f;
-	float _aspect = 0.0f;
-	float _zNear = 0.0f;
-	float _zFar = 0.0f;
+	float _fieldOfView = 45.0f;
+	float _aspect = 1.0f;
+	float _zNear = 0.1f;
+	float _zFar = 1.0f;
 
 	XMATH::Matrix4x4 cameraMatrix;
 };
@@ -45,13 +53,13 @@ void Camera::setPerspective(float fieldOfViewDegree, float aspect, float zNear, 
 }
 
 inline
-XMATH::Matrix4x4 Camera::cameraMatrix4x4() const {
+const XMATH::Matrix4x4& Camera::cameraMatrix4x4() const {
 	return cameraMatrix;
 }
 
 inline 
 void Camera::updateCameraMatrix() {
-	cameraMatrix = XMATH::Matrix4x4::lookAt(_position, _target, _up) *
+	cameraMatrix = XMATH::Matrix4x4::lookAt(position, target, up) *
 		XMATH::Matrix4x4::perspective(XMATH::radiansFromDegrees(_fieldOfView), _aspect, _zNear, _zFar);
 }
 
