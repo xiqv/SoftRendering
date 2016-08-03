@@ -43,8 +43,8 @@ private:
 
 inline
 Window::~Window() {
-	delete[] _canvas;
-	delete[] _mesh;
+	delete _canvas;
+	delete _mesh;
 }
 
 inline

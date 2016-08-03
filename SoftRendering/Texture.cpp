@@ -19,8 +19,8 @@ Color Texture::sample(float u, float v) const {
 
 void Texture::translateFromImage(const Image & image) {
 	uint32_t *tempTexture = new uint32_t[image.height*image.width];
-	memcpy(tempTexture, image.image, image.height*image.width);
-
+	memcpy(tempTexture, image.image, image.height*image.width*sizeof(uint32_t));
+	
 	if (texture != NULL) {
 		delete[] texture;
 	}

@@ -11,6 +11,9 @@ Vertex Canvas::project(const Vertex & v, const XMATH::Matrix4x4 & transform) con
 
 	transformPosition.x = (transformPosition.x + 1.0f)*_width*0.5f;  //这里不同
 	transformPosition.y = (1.0f - transformPosition.y)*_height*0.5f;
+
+	//transformPosition.x = transformPosition.x*_width+_width/2;  //这里不同
+	//transformPosition.y = -transformPosition.y*_height + _height / 2;
 	
 	return Vertex(transformPosition, v.normal, v.u, v.v, v.color);
 }
@@ -31,7 +34,7 @@ void Canvas::drawScanLine(const Vertex & v1, const Vertex & v2, const Texture & 
 
 	int x1 = int(v1.position.x);
 	int x2 = int(v2.position.x);
-
+	 
 	int dx = x2 - x1;
 	int sign = dx > 0 ? 1 : -1;
 	float factor = 0.0f;
@@ -39,10 +42,11 @@ void Canvas::drawScanLine(const Vertex & v1, const Vertex & v2, const Texture & 
 	for (int x = x1, i = 0; i != dx*sign + 1; ++i, x += sign){
 		//利用i来控制循环,从而保证扫描线两端点均可被渲染
 		if (dx != 0) {
-			factor = float((x1 - x) / dx);
+			factor = float(x - x1) / dx;
 		}
 		
 		Vertex v = v1.interpolate(v2, factor);
+
 		Color colorV = tex.sample(v.u, v.v);
 
 		drawPoint(XMATH::Vector3(v.position.x, v.position.y, v.position.z), colorV);
@@ -75,7 +79,7 @@ void Canvas::drawLine(const Vertex & v1, const Vertex & v2) {
 
 		for (int x = x1; x != x2; x += sign) {
 			int y = y1 + (x - x1)*ratio;
-			Color colorXY = v1.color.interpolate(v2.color, (float)(x - x1) / dx);
+			Color colorXY = v1.color.interpolate(v2.color, float(x - x1) / dx);
 			drawPoint(XMATH::Vector3(x, y), colorXY);
 		}
 	}//abs(dx) > abs(dy)
@@ -89,7 +93,7 @@ void Canvas::drawLine(const Vertex & v1, const Vertex & v2) {
 
 		for (int y = y1; y != y2; y += sign) {
 			int x = x1 + (y - y1)*ratio;
-			Color colorXY = v1.color.interpolate(v2.color, (float)(y - y1) / dy);
+			Color colorXY = v1.color.interpolate(v2.color, float(y - y1) / dy);
 			drawPoint(XMATH::Vector3(x, y), colorXY);
 		}
 	}//Draw Line
@@ -121,7 +125,7 @@ void Canvas::drawTriangle(const Vertex & v1, const Vertex & v2, const Vertex & v
 	for (int y = beginY; y != endY + 1; ++y){
 		float factor = 0.0f;
 		if (endY - beginY != 0) {
-			factor = float((y - beginY) / (endY - beginY));
+			factor = float(y - beginY) / (endY - beginY);
 		}
 
 		Vertex factorAM = a->interpolate(midVer, factor);
@@ -136,7 +140,7 @@ void Canvas::drawTriangle(const Vertex & v1, const Vertex & v2, const Vertex & v
 	for (int y = beginY; y != endY + 1; ++y) {
 		float factor = 0.0f;
 		if (endY - beginY != 0) {
-			factor = float((y - beginY) / (endY - beginY));
+			factor = float(y - beginY) / (endY - beginY);
 		}
 
 		Vertex factorCM = midVer.interpolate(*c, factor);
@@ -156,8 +160,8 @@ void Canvas::drawMesh(const Mesh & mesh) {
 	
 	for (int i = 0; i != mesh.indices.size(); i+=3) {
 		const Vertex &a = mesh.vertices[mesh.indices[i]];
-		const Vertex &b = mesh.vertices[mesh.indices[i+1]];
-		const Vertex &c = mesh.vertices[mesh.indices[i+2]];
+		const Vertex &b = mesh.vertices[mesh.indices[i +1]];
+		const Vertex &c = mesh.vertices[mesh.indices[i +2]];
 
 		Vertex v1 = project(a, transform);
 		Vertex v2 = project(b, transform);

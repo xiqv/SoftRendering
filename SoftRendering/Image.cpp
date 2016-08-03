@@ -28,9 +28,9 @@ Image::Image(const char * path) {
 
 	for (int i = 0; i != height; ++i) {
 		getNextLine(imageIs, line);
-		vs = splitLine(line);
+		//vs = splitLine(line);
+		std::istringstream iss(line);
 		for (int j = 0; j != width; ++j) {
-			std::istringstream iss(vs[j]);
 			uint32_t value;
 			iss >> value;
 			image[i*width + j] = value;
