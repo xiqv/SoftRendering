@@ -84,8 +84,8 @@ namespace XMATH {
 
 		static Matrix4x4 rotation(const Vector3& r) {
 			Matrix4x4 x = rotationX(r.x);
-			Matrix4x4 y = rotationX(r.y);
-			Matrix4x4 z = rotationX(r.z);
+			Matrix4x4 y = rotationY(r.y);
+			Matrix4x4 z = rotationZ(r.z);
 
 			return x * y * z;
 		}

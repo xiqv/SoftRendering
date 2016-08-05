@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "Matrix4x4.h"
+#include "Xmath.h"
 
 using XMATH::Matrix4x4;
 
@@ -29,9 +30,6 @@ void Canvas::drawPixel(int x, int y, float z, const Color& c) {
 }
 
 void Canvas::drawScanLine(const Vertex & v1, const Vertex & v2, const Texture & tex) {
-	//扫描线要求等高
-	assert(XMATH::equal(v1.position.y, v2.position.y));
-
 	int x1 = int(v1.position.x);
 	int x2 = int(v2.position.x);
 	 
@@ -100,6 +98,10 @@ void Canvas::drawLine(const Vertex & v1, const Vertex & v2) {
 }
 
 void Canvas::drawTriangle(const Vertex & v1, const Vertex & v2, const Vertex & v3, const Texture & tex) {
+	if (XMATH::equal(v1.position.y, v2.position.y) && XMATH::equal(v1.position.y, v3.position.y)) {
+		//如果三点共线，则不绘制三角形
+		return;
+	}
 	const Vertex *a = &v1;
 	const Vertex *b = &v2;
 	const Vertex *c = &v3;
@@ -155,7 +157,7 @@ void Canvas::drawMesh(const Mesh & mesh) {
 	Matrix4x4 translation = Matrix4x4::translation(mesh.position);
 	Matrix4x4 rotate = Matrix4x4::rotation(mesh.rotation);
 
-	Matrix4x4 world = rotate * translation * scale;
+	Matrix4x4 world = scale * rotate * translation;
 	Matrix4x4 transform = world * _camera.cameraMatrix4x4();
 	
 	for (int i = 0; i != mesh.indices.size(); i+=3) {

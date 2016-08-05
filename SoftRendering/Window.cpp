@@ -23,11 +23,11 @@ Window::Window(int argc, char * args[], int width, int height, const char * titl
 	_height = height;
 
 	_canvas = new Canvas((uint32_t*)screen->pixels, _width, _height);
-	Camera camera(Vector3(0, 0, -10), Vector3(0, 0, 0), Vector3(0, 1, 0), 45, float(_width) / _height, 0.1f, 1.0f);
+	Camera camera(Vector3(0, 0, -10), Vector3(0, 0, 0), Vector3(0, 1, 0), 45, float(_width) / _height, 0.1f, 100.0f);
 	_canvas->setCamera(camera);
 
-	const char *modelPath = "illidan.XI3d";
-	const char *texturePath = "illidan.XIimage";
+	const char *modelPath = "cube.XI3d";
+	const char *texturePath = "cube.XIimage";
 	if (argc > 2) {
 		modelPath = args[1];
 		texturePath = args[2];
@@ -94,7 +94,7 @@ void Window::update() {
 	if (keyStatus[SDLK_RIGHT]) {
 		_mesh->position.x += transform;
 	}
-	
+
 	//rotate
 	if (keyStatus[SDLK_w]) {
 		_mesh->rotation.x += transform;
