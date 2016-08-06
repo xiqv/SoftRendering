@@ -26,8 +26,8 @@ Window::Window(int argc, char * args[], int width, int height, const char * titl
 	Camera camera(Vector3(0, 0, -5), Vector3(0, 0, 0), Vector3(0, 1, 0), 45, float(_width) / _height, 0.1f, 100.0f);
 	_canvas->setCamera(camera);
 
-	const char *modelPath = "cube.XI3d";
-	const char *texturePath = "cube.XIimage";
+	const char *modelPath = "Model\\cube.XI3d";
+	const char *texturePath = "Model\\cube.XIimage";
 	if (argc > 2) {
 		modelPath = args[1];
 		texturePath = args[2];
