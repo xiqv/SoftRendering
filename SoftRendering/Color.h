@@ -61,7 +61,6 @@ uint32_t Color::getUint32() const {
 	uint32_t B = uint32_t(b * 255);
 	uint32_t A = uint32_t(a * 255);
 
-	//uint32_t value = (R << 24) | (G << 16) | (B << 8) | A;   //这里与萧大的不同
 	uint32_t value = (A << 24) | (R << 16) | (G << 8) | B;
 	return value;
 }

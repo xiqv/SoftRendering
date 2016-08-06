@@ -39,7 +39,7 @@ private:
 	float _fieldOfView = 45.0f;
 	float _aspect = 1.0f;
 	float _zNear = 0.1f;
-	float _zFar = 1.0f;
+	float _zFar = 100.0f;
 
 	XMATH::Matrix4x4 cameraMatrix;
 };

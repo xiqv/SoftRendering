@@ -23,7 +23,7 @@ Window::Window(int argc, char * args[], int width, int height, const char * titl
 	_height = height;
 
 	_canvas = new Canvas((uint32_t*)screen->pixels, _width, _height);
-	Camera camera(Vector3(0, 0, -10), Vector3(0, 0, 0), Vector3(0, 1, 0), 45, float(_width) / _height, 0.1f, 100.0f);
+	Camera camera(Vector3(0, 0, -5), Vector3(0, 0, 0), Vector3(0, 1, 0), 45, float(_width) / _height, 0.1f, 100.0f);
 	_canvas->setCamera(camera);
 
 	const char *modelPath = "cube.XI3d";
@@ -108,4 +108,5 @@ void Window::update() {
 	if (keyStatus[SDLK_d]) {
 		_mesh->rotation.y -= transform;
 	}
+
 }

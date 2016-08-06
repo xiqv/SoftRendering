@@ -10,11 +10,8 @@ using XMATH::Matrix4x4;
 Vertex Canvas::project(const Vertex & v, const XMATH::Matrix4x4 & transform) const {
 	XMATH::Vector3 transformPosition = transform.transform(v.position);
 
-	transformPosition.x = (transformPosition.x + 1.0f)*_width*0.5f;  //这里不同
-	transformPosition.y = (1.0f - transformPosition.y)*_height*0.5f;
-
-	//transformPosition.x = transformPosition.x*_width+_width/2;  //这里不同
-	//transformPosition.y = -transformPosition.y*_height + _height / 2;
+	transformPosition.x = transformPosition.x*_width / 2 + _width / 2;
+	transformPosition.y = -transformPosition.y*_height / 2 + _height / 2;
 	
 	return Vertex(transformPosition, v.normal, v.u, v.v, v.color);
 }
@@ -99,7 +96,20 @@ void Canvas::drawLine(const Vertex & v1, const Vertex & v2) {
 
 void Canvas::drawTriangle(const Vertex & v1, const Vertex & v2, const Vertex & v3, const Texture & tex) {
 	if (XMATH::equal(v1.position.y, v2.position.y) && XMATH::equal(v1.position.y, v3.position.y)) {
-		//如果三点共线，则不绘制三角形
+		//如果三点共线，则绘制扫描线
+		const Vertex *leftVertex = &v1;
+		const Vertex *midVertex = &v2;
+		const Vertex *rightVertex = &v3;
+		if (leftVertex->position.x > midVertex->position.x) {
+			std::swap(leftVertex, midVertex);
+		}
+		if (midVertex->position.x > rightVertex->position.x) {
+			std::swap(midVertex, rightVertex);
+		}
+		if (leftVertex->position.x > midVertex->position.x) {
+			std::swap(leftVertex, midVertex);
+		}
+		drawScanLine(*leftVertex, *rightVertex, tex);
 		return;
 	}
 	const Vertex *a = &v1;
@@ -168,6 +178,14 @@ void Canvas::drawMesh(const Mesh & mesh) {
 		Vertex v1 = project(a, transform);
 		Vertex v2 = project(b, transform);
 		Vertex v3 = project(c, transform);
+
+		//剪切
+		if (v1.position.z < 0.0f || v2.position.z < 0.0f || v2.position.z < 0.0f ||
+			v1.position.z > 1.0f || v2.position.z > 1.0f || v2.position.z > 1.0f) {
+			return;
+		}
+
+		//背面剔除
 
 		drawTriangle(v1, v2, v3, *mesh.texture);
 	}
